@@ -78,7 +78,7 @@ public class TCPServer{
 	}
 
 	private static void saveCustomer(String inputLine){
-		// inputLine -> #CUSTOMER:Raul Geomar;Peña Gomez;95024590;Corrientes 990;raul.pena@hotmail.com;+54911111111
+		// inputLine -> #CUSTOMER:Some;Guy;99666777;False Street 123;some.guy@mail.com;+54911911911
 		if(inputLine.contains("CUSTOMER:")){
 			String[] customerData = inputLine.substring(inputLine.indexOf(":") + 1).split(";");
 			if(customerData.length == 6){

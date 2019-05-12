@@ -20,14 +20,13 @@ public class TCPClient{
 		while(true){
 			System.out.print("Enter a message: ");
 			String mensaje = scn.nextLine();
-			String msg = client.sendMessage(mensaje);
+			String returnedMessage = client.sendMessage(mensaje);
 			if(mensaje.equals(".")){
-				System.out.println("Leaving the application");
-				System.out.println(msg);
+				System.out.printf("Leaving the application - %s%n", returnedMessage);
 				client.stopConnection();
 				System.exit(0);
 			}else{
-				System.out.println("Message sent -> " + msg);
+				System.out.printf("Message sent -> %s%n", returnedMessage);
 			}
 		}
 	}

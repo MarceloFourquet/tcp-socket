@@ -82,7 +82,7 @@ public class Customer{
 
 	@Override
 	public String toString(){
-		return "Customer{" + "id=" + id + ", name=" + name + ", last_name=" + last_name + ", dni=" + dni + ", address=" + address + ", email=" + email + ", phone=" + phone + '}';
+		return String.format("CUSTOMER:%s;%s;%d;%s;%s;%s", name, last_name, dni, address, email, phone);
 	}
 
 }

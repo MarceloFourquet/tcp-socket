@@ -82,7 +82,7 @@ public class TCPServer{
 		if(inputLine.contains("CUSTOMER:")){
 			String[] customerData = inputLine.substring(inputLine.indexOf(":") + 1).split(";");
 			if(customerData.length == 6){
-				new CustomerDAO().saveCustomer(customerData);
+				new CustomerDAO().createCustomer(customerData);
 			}else{
 				System.out.println("Incomplete data - The customer could not be created");
 			}

@@ -32,39 +32,39 @@ public class CustomerDAO{
 		}
 	}
 
-	public void saveCustomer(String[] elementos){
+	public void createCustomer(String[] customerData){
 		Customer customer = new Customer();
-		customer.setName(elementos[0]);
-		customer.setLast_name(elementos[1]);
-		customer.setDni(Integer.valueOf(elementos[2]));
-		customer.setAddress(elementos[3]);
-		customer.setEmail(elementos[4]);
-		customer.setPhone(elementos[5]);
+		customer.setName(customerData[0]);
+		customer.setLast_name(customerData[1]);
+		customer.setDni(Integer.valueOf(customerData[2]));
+		customer.setAddress(customerData[3]);
+		customer.setEmail(customerData[4]);
+		customer.setPhone(customerData[5]);
 		try{
-			create(customer);
+			saveCustomer(customer);
 		}catch(SQLException ex){
 			LOG.error(ex.getMessage());
 		}
 	}
 
-	public void create(Customer customer) throws SQLException{
+	public void saveCustomer(Customer customer) throws SQLException{
 		final String query = "insert into customer (name, last_name, dni, address, email, phone) values (?, ?, ?, ?, ?, ?)";
-		PreparedStatement stmt = dbConnectionManager.getConnection().prepareStatement(query);
-		stmt.setString(1, customer.getName());
-		stmt.setString(2, customer.getLast_name());
-		stmt.setInt(3, customer.getDni());
-		stmt.setString(4, customer.getAddress());
-		stmt.setString(5, customer.getEmail());
-		stmt.setString(6, customer.getPhone());
-		stmt.execute();
+		try(PreparedStatement stmt = dbConnectionManager.getConnection().prepareStatement(query)){
+			stmt.setString(1, customer.getName());
+			stmt.setString(2, customer.getLast_name());
+			stmt.setInt(3, customer.getDni());
+			stmt.setString(4, customer.getAddress());
+			stmt.setString(5, customer.getEmail());
+			stmt.setString(6, customer.getPhone());
+			stmt.execute();
+		}
 	}
 
 	public Customer consulta(int id) throws SQLException{
 		Customer customer = null;
 		ResultSet result = null;
-		try{
-			final String query = "select * from customer where id = ?";
-			PreparedStatement stmt = dbConnectionManager.getConnection().prepareStatement(query);
+		final String query = "select * from customer where id = ?";
+		try(PreparedStatement stmt = dbConnectionManager.getConnection().prepareStatement(query)){
 			stmt.setInt(1, id);
 			result = stmt.executeQuery();
 			if(result != null){

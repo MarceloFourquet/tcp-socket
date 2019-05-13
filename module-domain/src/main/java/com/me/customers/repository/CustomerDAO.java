@@ -34,10 +34,10 @@ public class CustomerDAO{
 
 	public void createCustomer(String[] customerData){
 		Customer customer = new Customer();
-		customer.setName(customerData[0]);
-		customer.setLast_name(customerData[1]);
+		customer.setName(customerData[0].trim());
+		customer.setLast_name(customerData[1].trim());
 		customer.setDni(Integer.valueOf(customerData[2]));
-		customer.setAddress(customerData[3]);
+		customer.setAddress(customerData[3].trim());
 		customer.setEmail(customerData[4]);
 		customer.setPhone(customerData[5]);
 		try{

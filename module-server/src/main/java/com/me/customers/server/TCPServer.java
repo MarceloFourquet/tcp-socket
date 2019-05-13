@@ -6,12 +6,15 @@ import java.net.Socket;
 import java.net.ServerSocket;
 import org.apache.log4j.Logger;
 import com.me.customers.repository.CustomerDAO;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class TCPServer{
 
 	private ServerSocket serverSocket;
 	private static final Logger LOG = Logger.getLogger(TCPServer.class);
-
+	private static final Pattern INPUT_LINE_PATTERN = Pattern.compile("^#CUSTOMER:[A-Za-z ñÑáéíóúÁÉÍÓÚüÜ]+;[A-Za-z ñÑáéíóúÁÉÍÓÚüÜ]+;[0-9]{7,10};[A-Za-z0-9º. ñÑáéíóúÁÉÍÓÚüÜ]+;[A-Za-z0-9-_]+(\\.[A-Za-z0-9-_]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*\\.[A-Za-z]{2,};\\+[0-9]{9,16}$");
+	
 	public static void main(String[] args){
 		TCPServer server = new TCPServer();
 		server.startConnection(5555);
@@ -64,7 +67,7 @@ public class TCPServer{
 					}
 					outputStream.println(inputLine.toUpperCase());
 					if(inputLine.length() > 0){
-						saveCustomer(inputLine);
+						getCustomerData(inputLine);
 					}
 				}
 				inputStream.close();
@@ -77,15 +80,12 @@ public class TCPServer{
 
 	}
 
-	private static void saveCustomer(String inputLine){
-		// inputLine -> #CUSTOMER:Some;Guy;99666777;False Street 123;some.guy@mail.com;+54911911911
-		if(inputLine.contains("CUSTOMER:")){
+	private static void getCustomerData(String inputLine){
+		// inputLine -> #CUSTOMER:Victor Alberto;Montenegro Ortiz;99666777;Buena Vista 2646;victor.montenegro@mail.com;+54911911911
+		Matcher m = INPUT_LINE_PATTERN.matcher(inputLine);
+		if(m.matches()){
 			String[] customerData = inputLine.substring(inputLine.indexOf(":") + 1).split(";");
-			if(customerData.length == 6){
-				new CustomerDAO().createCustomer(customerData);
-			}else{
-				System.out.println("Incomplete data - The customer could not be created");
-			}
+			new CustomerDAO().createCustomer(customerData);
 		}else{
 			System.out.println("Invalid message");
 		}

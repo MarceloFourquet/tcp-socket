@@ -1,3 +1,5 @@
 /module-server/target/
 /module-client/target/
 /module-domain/target/
+/module-server/log.log
+/module-client/log.log

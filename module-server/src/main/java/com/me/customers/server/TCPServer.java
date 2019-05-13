@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.ServerSocket;
 import org.apache.log4j.Logger;
 import com.me.customers.repository.CustomerDAO;
+import java.util.Properties;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -13,11 +14,22 @@ public class TCPServer{
 
 	private ServerSocket serverSocket;
 	private static final Logger LOG = Logger.getLogger(TCPServer.class);
-	private static final Pattern INPUT_LINE_PATTERN = Pattern.compile("^#CUSTOMER:[A-Za-z ñÑáéíóúÁÉÍÓÚüÜ]+;[A-Za-z ñÑáéíóúÁÉÍÓÚüÜ]+;[0-9]{7,10};[A-Za-z0-9º. ñÑáéíóúÁÉÍÓÚüÜ]+;[A-Za-z0-9-_]+(\\.[A-Za-z0-9-_]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*\\.[A-Za-z]{2,};\\+[0-9]{9,16}$");
-	
+	private static final Pattern INPUT_LINE_PATTERN = Pattern.compile(getPattern());
+
 	public static void main(String[] args){
 		TCPServer server = new TCPServer();
 		server.startConnection(5555);
+	}
+
+	private static String getPattern(){
+		try{
+			Properties prop = new Properties();
+			prop.load(TCPServer.class.getClassLoader().getResourceAsStream("pattern.properties"));
+			return prop.getProperty("pattern.customer");
+		}catch(IOException ex){
+			LOG.error(ex.getMessage());
+		}
+		return null;
 	}
 
 	public void startConnection(int port){
@@ -59,16 +71,13 @@ public class TCPServer{
 				inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				String inputLine;
 				while((inputLine = inputStream.readLine()) != null){
-					LOG.debug(String.format("Message received [%s] -> From [%s]",
-					inputLine, clientSocket.getInetAddress().getHostName()));
+					LOG.debug(String.format("Message received [%s] -> From [%s]", inputLine, clientSocket.getInetAddress().getHostName()));
 					if(inputLine.equals(".")){
 						outputStream.println("Bye");
 						break;
 					}
 					outputStream.println(inputLine.toUpperCase());
-					if(inputLine.length() > 0){
-						getCustomerData(inputLine);
-					}
+					getCustomerData(inputLine);
 				}
 				inputStream.close();
 				outputStream.close();

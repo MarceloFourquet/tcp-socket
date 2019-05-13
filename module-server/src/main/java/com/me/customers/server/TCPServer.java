@@ -91,10 +91,15 @@ public class TCPServer{
 
 	private static void getCustomerData(String inputLine){
 		// inputLine -> #CUSTOMER:Victor Alberto;Montenegro Ortiz;99666777;Buena Vista 2646;victor.montenegro@mail.com;+54911911911
-		Matcher m = INPUT_LINE_PATTERN.matcher(inputLine);
-		if(m.matches()){
-			String[] customerData = inputLine.substring(inputLine.indexOf(":") + 1).split(";");
-			new CustomerDAO().createCustomer(customerData);
+		if(inputLine.contains("CUSTOMER:")){
+			String rawData = inputLine.substring(inputLine.indexOf(":") + 1);
+			Matcher m = INPUT_LINE_PATTERN.matcher(rawData);
+			if(m.matches()){
+				String[] customerData = rawData.split(";");
+				new CustomerDAO().createCustomer(customerData);
+			}else{
+				System.out.println("Invalid message");
+			}
 		}else{
 			System.out.println("Invalid message");
 		}

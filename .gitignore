@@ -3,3 +3,8 @@
 /module-domain/target/
 /module-server/log.log
 /module-client/log.log
+/Module-TCP-server/target/
+/Module-TCP-Client/target/
+/Module-UDP/target/
+/Module-UDP-Client/target/
+/Module-UDP-Server/target/

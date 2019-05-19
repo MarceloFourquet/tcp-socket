@@ -6,10 +6,10 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.me</groupId>
-    <artifactId>tcp-socket</artifactId>
+    <artifactId>Sockets</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
-    <name>tcp-socket</name>
+    <name>Sockets</name>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,8 +17,12 @@
     </properties>
     
     <modules>
-        <module>module-server</module>
-        <module>module-client</module>
-        <module>module-domain</module>
+        <module>Module-Domain</module>
+        <module>Module-TCP-Server</module>
+        <module>Module-UDP-Server</module>
+        <module>Module-UDP-Client</module>
+        <module>Module-UDP</module>
+        <module>Module-TCP-Client</module>
     </modules>
+    
 </project>
